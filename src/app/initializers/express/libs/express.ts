@@ -2,7 +2,6 @@ export default function createServer({
   json,
   urlencoded,
   app,
-  handler,
   cors,
   compression,
   helmet,
@@ -10,8 +9,7 @@ export default function createServer({
 }) {
   return Object.freeze({ server });
 
-  function server({ port, hostName }) {
-    const routes = handler.routes;
+  function server({ port, hostName, routes }) {
     app.use(helmet());
     app.options("*", cors({ credentials: true, origin: true }));
     app.use(cors());
@@ -19,9 +17,9 @@ export default function createServer({
     app.use(json());
     app.use(urlencoded({ extended: true }));
 
-    app.get("/", (req, res) => {
-      res.json({ data: "Hello world!" });
-    });
+    for (let route of routes) {
+      app[route.method](`${route.path}`, route.component);
+    }
 
     app.listen(port, hostName, () => {
       logger.info(`[EXPRESS] Server running at http://${hostName}:${port}/`);
