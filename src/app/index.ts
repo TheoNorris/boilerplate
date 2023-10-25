@@ -1,16 +1,13 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
+import config from "./config";
 import { server } from "./initializers/express";
 import { logger } from "./libs/logger";
 
-const name = process.env.NAME;
-const hostName = process.env.NODE_HOSTNAME;
-const port = process.env.NODE_PORT;
-
 try {
-  logger.info(`[${name}] Bootstrapping micro service`);
-  server({ port, hostName });
+  logger.info(`[${config.APP_NAME}] Bootstrapping micro service`);
+  server({ port: config.NODE_PORT, hostname: config.NODE_HOSTNAME });
 } catch (error) {
-  logger.error(`[${name}] caught exception: ${error.message}`);
+  logger.error(`[${config.APP_NAME}] caught exception: ${error.message}`);
 }

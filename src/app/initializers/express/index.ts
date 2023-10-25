@@ -11,7 +11,7 @@ const app = express();
 const json = express.json;
 const urlencoded = express.urlencoded;
 
-const server = ({ port, hostName }) =>
+const server = ({ hostname, port }) =>
   createServer({
     json,
     urlencoded,
@@ -20,6 +20,6 @@ const server = ({ port, hostName }) =>
     compression,
     helmet,
     logger,
-  }).server({ port, hostName, routes });
+  }).server({ hostname, port, routes });
 
 export { server };

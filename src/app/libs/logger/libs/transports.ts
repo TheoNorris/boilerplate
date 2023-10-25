@@ -1,5 +1,5 @@
 export default function createLogger({ format, transports }) {
-  const logPath = process.env.NODE_LOG_PATH;
+  const filePath = process.env.NODE_LOG_PATH;
   const { combine, printf, colorize, json } = format;
 
   const logFormat = printf(({ level, message, timestamp, stack }) => {
@@ -11,8 +11,12 @@ export default function createLogger({ format, transports }) {
       level: "http",
       format: combine(colorize(), logFormat),
     }),
+    new transports.Console({
+      level: "error",
+      format: combine(colorize(), logFormat),
+    }),
     new transports.File({
-      filename: `${logPath}/error.log`,
+      filename: filePath + "/error.log",
       handleExceptions: true,
       maxsize: 5242880, //5MB
       maxFiles: 5,
@@ -20,7 +24,7 @@ export default function createLogger({ format, transports }) {
       format: combine(json()),
     }),
     new transports.File({
-      filename: `${logPath}/all.log`,
+      filename: filePath + "/all.log",
       handleExceptions: true,
       maxsize: 5242880, //5MB
       maxFiles: 5,
@@ -35,7 +39,7 @@ export default function createLogger({ format, transports }) {
       format: combine(colorize(), logFormat),
     }),
     new transports.File({
-      filename: `${logPath}/error.log`,
+      filename: `${filePath}/error.log`,
       handleExceptions: true,
       maxsize: 5242880, //5MB
       maxFiles: 5,
@@ -43,7 +47,7 @@ export default function createLogger({ format, transports }) {
       format: combine(json()),
     }),
     new transports.File({
-      filename: `${logPath}/all.log`,
+      filename: `${filePath}/all.log`,
       handleExceptions: true,
       maxsize: 5242880, //5MB
       maxFiles: 5,
